@@ -1,0 +1,19 @@
+{
+  "categorias": ["Hardware", "Software", "Red", "Cuentas y accesos"],
+  "prioridades": [
+    { "nombre": "Baja", "nivel": 1 },
+    { "nombre": "Media", "nivel": 2 },
+    { "nombre": "Alta", "nivel": 3 },
+    { "nombre": "Crítica", "nivel": 4 }
+  ],
+  "solicitudes": [
+    { "nombre_solicitante": "Ana Torres", "correo": "ana.torres@example.com", "categoria": "Hardware", "prioridad": "Alta", "descripcion": "La laptop no enciende después de una actualización.", "estado": "pendiente", "dias_atras": 1 },
+    { "nombre_solicitante": "Luis Mendoza", "correo": "luis.mendoza@example.com", "categoria": "Software", "prioridad": "Media", "descripcion": "Necesito instalar Visual Studio Code en mi equipo.", "estado": "en_proceso", "dias_atras": 2 },
+    { "nombre_solicitante": "María Gómez", "correo": "maria.gomez@example.com", "categoria": "Red", "prioridad": "Crítica", "descripcion": "Sin conexión a internet en toda el área de contabilidad.", "estado": "en_proceso", "dias_atras": 0 },
+    { "nombre_solicitante": "Carlos Ruiz", "correo": "carlos.ruiz@example.com", "categoria": "Cuentas y accesos", "prioridad": "Media", "descripcion": "Olvidé la contraseña de mi correo institucional.", "estado": "resuelta", "dias_atras": 5 },
+    { "nombre_solicitante": "Sofía Ramírez", "correo": "sofia.ramirez@example.com", "categoria": "Hardware", "prioridad": "Baja", "descripcion": "El mouse del escritorio 14 presenta fallas intermitentes.", "estado": "pendiente", "dias_atras": 3 },
+    { "nombre_solicitante": "Jorge Salinas", "correo": "jorge.salinas@example.com", "categoria": "Software", "prioridad": "Alta", "descripcion": "El sistema de nómina marca error al abrir reportes.", "estado": "pendiente", "dias_atras": 1 },
+    { "nombre_solicitante": "Paola Díaz", "correo": "paola.diaz@example.com", "categoria": "Red", "prioridad": "Baja", "descripcion": "El WiFi de la sala de juntas es lento por las tardes.", "estado": "resuelta", "dias_atras": 7 },
+    { "nombre_solicitante": "Daniel Herrera", "correo": "daniel.herrera@example.com", "categoria": "Cuentas y accesos", "prioridad": "Alta", "descripcion": "Solicito acceso a la carpeta compartida de Finanzas.", "estado": "en_proceso", "dias_atras": 2 }
+  ]
+}
