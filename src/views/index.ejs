@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de solicitudes</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>Solicitudes de soporte</h1>
+  <p><%= stats.total %> registradas en total</p>
+</header>
+<main>
+  <section class="resumen" aria-label="Resumen por estado">
+    <% const porEstado = Object.fromEntries(stats.por_estado.map(e => [e.estado, e.total])); %>
+    <div class="estado-box e-pendiente"><b><%= porEstado.pendiente || 0 %></b> Pendientes</div>
+    <div class="estado-box e-en_proceso"><b><%= porEstado.en_proceso || 0 %></b> En proceso</div>
+    <div class="estado-box e-resuelta"><b><%= porEstado.resuelta || 0 %></b> Resueltas</div>
+  </section>
+
+  <section class="barras">
+    <% [['Por categoría', stats.por_categoria, 'categoria'], ['Por prioridad', stats.por_prioridad, 'prioridad']].forEach(([titulo, datos, key]) => {
+         const max = Math.max(1, ...datos.map(d => d.total)); %>
+      <div>
+        <h2><%= titulo %></h2>
+        <% datos.forEach(d => { %>
+          <div class="barra">
+            <span><%= d[key] %></span>
+            <i style="width: <%= Math.round(d.total / max * 100) %>%"></i>
+            <em><%= d.total %></em>
+          </div>
+        <% }) %>
+      </div>
+    <% }) %>
+  </section>
+
+  <form class="filtros" method="get">
+    <label>Categoría
+      <select name="categoria"><option value="">Todas</option>
+        <% categorias.forEach(c => { %><option <%= filtros.categoria === c.nombre ? 'selected' : '' %>><%= c.nombre %></option><% }) %>
+      </select></label>
+    <label>Prioridad
+      <select name="prioridad"><option value="">Todas</option>
+        <% prioridades.forEach(p => { %><option <%= filtros.prioridad === p.nombre ? 'selected' : '' %>><%= p.nombre %></option><% }) %>
+      </select></label>
+    <label>Estado
+      <select name="estado"><option value="">Todos</option>
+        <% estados.forEach(e => { %><option value="<%= e %>" <%= filtros.estado === e ? 'selected' : '' %>><%= e.replace('_', ' ') %></option><% }) %>
+      </select></label>
+    <button type="submit">Filtrar</button>
+    <a href="/">Limpiar</a>
+  </form>
+
+  <div class="tabla-wrap">
+    <table>
+      <thead><tr><th>Folio</th><th>Solicitante</th><th>Categoría</th><th>Prioridad</th><th>Descripción</th><th>Fecha</th><th>Estado</th></tr></thead>
+      <tbody>
+      <% if (!solicitudes.length) { %>
+        <tr><td colspan="7" class="vacio">No hay solicitudes con esos filtros. Quita algún filtro para ver más.</td></tr>
+      <% } %>
+      <% solicitudes.forEach(s => { %>
+        <tr>
+          <td class="folio"><%= s.folio %></td>
+          <td><%= s.nombre_solicitante %><small><%= s.correo %></small></td>
+          <td><%= s.categoria %></td>
+          <td><span class="pri p-<%= s.prioridad.toLowerCase().normalize('NFD').replace(/[^a-z]/g, '') %>"><%= s.prioridad %></span></td>
+          <td class="desc"><%= s.descripcion %></td>
+          <td><%= new Date(s.fecha_creacion).toLocaleDateString('es-MX') %></td>
+          <td>
+            <select class="cambiar-estado e-<%= s.estado %>" data-id="<%= s.id %>" aria-label="Estado de <%= s.folio %>">
+              <% estados.forEach(e => { %><option value="<%= e %>" <%= s.estado === e ? 'selected' : '' %>><%= e.replace('_', ' ') %></option><% }) %>
+            </select>
+          </td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</main>
+<script>
+  document.querySelectorAll('.cambiar-estado').forEach((sel) => {
+    sel.addEventListener('change', async () => {
+      const r = await fetch('/api/solicitudes/' + sel.dataset.id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado: sel.value })
+      });
+      if (r.ok) location.reload(); else alert('No se pudo actualizar el estado. Intenta de nuevo.');
+    });
+  });
+</script>
+</body>
+</html>
